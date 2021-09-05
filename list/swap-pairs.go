@@ -1,4 +1,4 @@
-package main
+package list
 
 // head->1->2->3->4->5
 // head->2->3->4       [head->2]

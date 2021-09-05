@@ -1,4 +1,4 @@
-package main
+package list
 
 func getIntersectionNode(headA, headB *ListNode) *ListNode {
 	// 求长度

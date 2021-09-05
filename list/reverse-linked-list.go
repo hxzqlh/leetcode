@@ -1,11 +1,10 @@
-package main
+package list
 
-// 		 1->2->3->4->5->null
+//       1->2->3->4->5->null
 // null<-1<-2<-3<-4<-5
 func reverseList(head *ListNode) *ListNode {
 	var pre *ListNode
-	cur := head
-	for cur != nil {
+	for cur := head; cur != nil; {
 		next := cur.Next
 		cur.Next = pre
 		pre = cur
@@ -15,30 +14,31 @@ func reverseList(head *ListNode) *ListNode {
 }
 
 // 递归
-// p := reverseList(head.Next)
-// head.Next = p
+// 1->2->3->4->5
+// 1->[2<-3<-4<-5]
+// 1<-[2<-3<-4<-5]
 func reverseList2(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
 	}
 
-	p := reverseList2(head.Next)
-	head.Next.Next = head
-	head.Next = nil
+	p := reverseList2(head.Next) // 2<-3<-4<-5(p)
+	head.Next.Next = head        // 1<-2
+	head.Next = nil              // null<-1
 	return p
 }
 
 // 递归
 func reverseList3(head *ListNode) *ListNode {
-	return help(nil, head)
+	return reverseHelp(nil, head)
 }
 
-func help(pre, head *ListNode) *ListNode {
+func reverseHelp(pre, head *ListNode) *ListNode {
 	if head == nil {
 		return pre
 	}
 
 	next := head.Next
 	head.Next = pre
-	return help(head, next)
+	return reverseHelp(head, next)
 }

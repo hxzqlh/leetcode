@@ -1,7 +1,7 @@
-package main
+package list
 
 func detectCycle(head *ListNode) *ListNode {
-	fast, slow := head.Next, head.Next
+	fast, slow := head, head
 
 	// 找相遇节点
 	for fast != nil && fast.Next != nil {
@@ -12,8 +12,8 @@ func detectCycle(head *ListNode) *ListNode {
 		}
 	}
 
-	// 找环形入口节点
-	slow = head.Next
+	// 从头结点和相遇结点，各走一步，直到相遇，相遇点即为环入口点
+	slow = head
 	for fast != slow {
 		fast = fast.Next
 		slow = slow.Next

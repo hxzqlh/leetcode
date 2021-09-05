@@ -4,14 +4,14 @@ import "fmt"
 
 // 带头节点的单链表
 type ListNode struct {
-	val  int
+	Val  int
 	Next *ListNode
 }
 
 func PrintList(head *ListNode) {
 	cur := head.Next
 	for ; cur != nil; cur = cur.Next {
-		fmt.Print(cur.val)
+		fmt.Print(cur.Val)
 	}
 	fmt.Println()
 }
@@ -32,7 +32,7 @@ func main() {
 	//n7 := &ListNode{7, n6}
 	//head2 := &ListNode{-1, n7} // 7->6->4->5
 	//node := getIntersectionNode(head, head2)
-	//fmt.Println(node.val)
+	//fmt.Println(node.Val)
 
 	//PrintList(head)
 	//head = swapPairs2(head)
@@ -45,7 +45,7 @@ func main() {
 	//n8 := &ListNode{8, n9}
 	//n5.Next = n8
 	//node := detectCycle(head)
-	//fmt.Println(node.val)
+	//fmt.Println(node.Val)
 
 	n6 := &ListNode{6, nil}
 	n7 := &ListNode{4, n6}

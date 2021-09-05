@@ -44,7 +44,7 @@ func mergeList(a *ListNode, b *ListNode) *ListNode {
 	p := a.Next
 	q := b.Next
 	for p != nil && q != nil {
-		if p.val < q.val {
+		if p.Val < q.Val {
 			cur.Next = p
 			p = p.Next
 		} else {

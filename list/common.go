@@ -31,6 +31,14 @@ func MakeList(arr []int) *ListNode {
 	return head
 }
 
+func FindTail(head *ListNode) *ListNode {
+	var p *ListNode
+	for cur := head; cur != nil; cur = cur.Next {
+		p = cur
+	}
+	return p
+}
+
 func IsEqual(a *ListNode, b *ListNode) bool {
 	p := a
 	q := b

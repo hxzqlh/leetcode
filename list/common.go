@@ -31,14 +31,6 @@ func MakeList(arr []int) *ListNode {
 	return head
 }
 
-func FindTail(head *ListNode) *ListNode {
-	var p *ListNode
-	for cur := head; cur != nil; cur = cur.Next {
-		p = cur
-	}
-	return p
-}
-
 func IsEqual(a *ListNode, b *ListNode) bool {
 	p := a
 	q := b
@@ -56,4 +48,31 @@ func IsEqual(a *ListNode, b *ListNode) bool {
 	}
 
 	return true
+}
+
+func Len(head *ListNode) int {
+	var len int
+	for cur := head; cur != nil; cur = cur.Next {
+		len++
+	}
+	return len
+}
+
+func FindTail(head *ListNode) *ListNode {
+	var p *ListNode
+	for cur := head; cur != nil; cur = cur.Next {
+		p = cur
+	}
+	return p
+}
+
+// 快慢指针法
+func FindMid(head *ListNode) *ListNode {
+	fast := head
+	slow := head
+	for fast != nil && fast.Next != nil {
+		fast = fast.Next.Next
+		slow = slow.Next
+	}
+	return slow
 }

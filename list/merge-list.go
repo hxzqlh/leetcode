@@ -41,8 +41,7 @@ func mergeList(a *ListNode, b *ListNode) *ListNode {
 	ret := new(ListNode)
 
 	cur := ret
-	p := a.Next
-	q := b.Next
+	p, q := a, b
 	for p != nil && q != nil {
 		if p.Val < q.Val {
 			cur.Next = p
@@ -62,5 +61,5 @@ func mergeList(a *ListNode, b *ListNode) *ListNode {
 		cur.Next = q
 	}
 
-	return ret
+	return ret.Next
 }

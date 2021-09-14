@@ -9,3 +9,14 @@ func Min(args ...int) int {
 	}
 	return min
 }
+
+
+func Max(args ...int) int {
+	max := args[0]
+	for _, item := range args {
+		if item > max {
+			max = item
+		}
+	}
+	return max
+}

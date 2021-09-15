@@ -30,6 +30,6 @@ func ListPartion(head *list.ListNode, end *list.ListNode) *list.ListNode {
 		q = q.Next
 	}
 	p.Val, head.Val = head.Val, p.Val
-	list.PrintList(head)
+	// list.PrintList(head)
 	return p
 }

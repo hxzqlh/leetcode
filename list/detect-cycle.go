@@ -1,6 +1,6 @@
 package list
 
-func detectCycle(head *ListNode) *ListNode {
+func DetectCycle(head *ListNode) *ListNode {
 	fast, slow := head, head
 
 	// 找相遇节点

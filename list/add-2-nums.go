@@ -3,7 +3,7 @@ package list
 // 反向排序
 // 输入：(7 -> 1 -> 6) + (5 -> 9 -> 2)，即617 + 295
 // 输出：2 -> 1 -> 9，即912
-func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+func AddTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	ret := new(ListNode) // 引入头节点
 
 	var carry int // 进位
@@ -40,10 +40,10 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 // 正向排序
 // 输入：(6 -> 1 -> 7) + (2 -> 9 -> 5)，即617 + 295
 // 输出：9 -> 1 -> 2，即912
-func addTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
+func AddTwoNumbers2(l1 *ListNode, l2 *ListNode) *ListNode {
 	// 逆序后，相加，再将结果逆序，即为正序结果
-	r1 := reverseList(l1)
-	r2 := reverseList(l2)
-	r3 := addTwoNumbers(r1, r2)
-	return reverseList(r3)
+	r1 := ReverseList(l1)
+	r2 := ReverseList(l2)
+	r3 := AddTwoNumbers(r1, r2)
+	return ReverseList(r3)
 }

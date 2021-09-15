@@ -26,7 +26,7 @@ func sort(head, tail *ListNode) *ListNode {
 
 	// mid: slow
 	// [head, mid) [mid, tail)
-	return mergeList(sort(head, slow), sort(slow, tail))
+	return MergeList(sort(head, slow), sort(slow, tail))
 }
 
 // 单链表归并排序,自底向上
@@ -58,7 +58,7 @@ func ListMergeSort2(head *ListNode) *ListNode {
 				cur.Next = nil
 			}
 
-			prev.Next = mergeList(head1, head2)
+			prev.Next = MergeList(head1, head2)
 
 			for prev.Next != nil {
 				prev = prev.Next

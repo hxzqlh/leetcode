@@ -7,18 +7,18 @@ package array
 //
 // 示例 2： 输入：nums = [-7,-3,2,3,11] 输出：[4,9,9,49,121]
 //
-func SortSquares(arr []int) []int {
-	ret := make([]int, len(arr))
+func SortSquares(nums []int) []int {
+	ret := make([]int, len(nums))
 
 	// 绝对值最大的只能是在数组的两端
-	pos := len(arr)-1
-	i, j := 0, len(arr)-1
+	pos := len(nums)-1
+	i, j := 0, len(nums)-1
 	for i<=j && pos >= 0 {
-		if arr[i]*arr[i] > arr[j]*arr[j] {
-			ret[pos] = arr[i]*arr[i]
+		if nums[i]*nums[i] > nums[j]*nums[j] {
+			ret[pos] = nums[i]* nums[i]
 			i++
 		} else {
-			ret[pos] = arr[j]*arr[j]
+			ret[pos] = nums[j]* nums[j]
 			j--
 		}
 		pos--

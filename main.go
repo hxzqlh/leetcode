@@ -4,25 +4,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"runtime"
 	"time"
 )
 
-const (
-	N       = 5
-	ResOk   = 0
-	ResFail = 1
-)
+const N = 5
+var APIList = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"}
 
 type JobRes struct {
 	job  string
-	code int
 	err  error
 }
 
-var APIList = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"}
-
-// 最多 N 个并发
+// 控制最多启动 N 个并发
 // 执行一系列任务
 // 任一任务有错误，立即返回
 // 等待所有任务执行完成
@@ -32,8 +25,8 @@ func main() {
 		workerCh <- struct{}{}
 	}
 
-	resCh := make(chan JobRes, len(APIList))
-	waitCh := make(chan struct{})
+	respCh := make(chan JobRes, len(APIList))
+	waitCh := make(chan string)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	go func() {
@@ -41,14 +34,18 @@ func main() {
 		for {
 			select {
 			case <-ctx.Done():
-				fmt.Printf("res goroutine canceled by main, reason:%s\n", ctx.Err())
+				fmt.Printf("resp goroutine canceled by main, reason:%s\n", ctx.Err())
 				return
-			case res := <-resCh:
+			case res := <-respCh:
 				num++
-				fmt.Printf("job:%v return err:%v\n", res.job, res.err)
-				if num == len(APIList) || res.code != ResOk{
+				fmt.Printf("job:%v result:%v\n", res.job, res.err)
+				if num == len(APIList) || res.err != nil{
 					cancel()
-					waitCh <- struct{}{}
+					if res.err != nil {
+						waitCh <- res.err.Error()
+					} else {
+						waitCh <- "success"
+					}
 				}
 			}
 		}
@@ -57,16 +54,15 @@ func main() {
 	for _, job := range APIList {
 		// wait worker available
 		<-workerCh
-		go workerFn(ctx, workerCh, resCh, job)
+		go dealJob(ctx, workerCh, respCh, job)
 	}
 
-	<-waitCh
-	time.Sleep(time.Second)
-	fmt.Println("main exit")
+	fmt.Println("wait all jobs finished or once error occurs...")
+	fmt.Println(<-waitCh)
 }
 
-func workerFn(ctx context.Context, workerCh chan struct{}, resCh chan JobRes, job string) {
-	fmt.Println("goroutines:", runtime.NumGoroutine())
+func dealJob(ctx context.Context, workerCh chan struct{}, respCh chan JobRes, job string) {
+	//fmt.Println("goroutines:", runtime.NumGoroutine())
 
 	for {
 		select {
@@ -74,13 +70,8 @@ func workerFn(ctx context.Context, workerCh chan struct{}, resCh chan JobRes, jo
 			fmt.Printf("job:%s canceled by main, reason:%s\n", job, ctx.Err())
 			return
 		default:
-			code := ResOk
 			err := callApi(job)
-			if err != nil {
-				code = ResFail
-			}
-
-			resCh <- JobRes{job: job, code: code, err: err}
+			respCh <- JobRes{job: job, err: err}
 
 			// reuse worker
 			workerCh <- struct{}{}
@@ -91,9 +82,9 @@ func workerFn(ctx context.Context, workerCh chan struct{}, resCh chan JobRes, jo
 
 func callApi(a string) error {
 	// handler
-	time.Sleep(200 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if a == "e" {
-		return errors.New(a)
+		return errors.New("ops!")
 	}
 	return nil
 }

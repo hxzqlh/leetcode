@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 )
@@ -20,15 +19,23 @@ type JobRes struct {
 // 任一任务有错误，立即返回
 // 等待所有任务执行完成
 func main() {
-	workerCh := make(chan struct{}, N)
-	for i := 0; i < N; i++ {
-		workerCh <- struct{}{}
-	}
-
+	jobCh := make(chan string, len(APIList))
 	respCh := make(chan JobRes, len(APIList))
 	waitCh := make(chan string)
 
+	// produce job
+	for _,  v := range APIList {
+		jobCh <- v
+	}
+	close(jobCh)
+
 	ctx, cancel := context.WithCancel(context.Background())
+	for i := 1; i <= N; i++ {
+		// consume job
+		go workerLoop(ctx, i, jobCh, respCh)
+	}
+
+	// collect job resp
 	go func() {
 		var num int
 		for {
@@ -51,31 +58,25 @@ func main() {
 		}
 	}()
 
-	for _, job := range APIList {
-		// wait worker available
-		<-workerCh
-		go dealJob(ctx, workerCh, respCh, job)
-	}
-
 	fmt.Println("wait all jobs finished or once error occurs...")
 	fmt.Println(<-waitCh)
 }
 
-func dealJob(ctx context.Context, workerCh chan struct{}, respCh chan JobRes, job string) {
+func workerLoop(ctx context.Context, index int, jobCh chan string, respCh chan JobRes) {
 	//fmt.Println("goroutines:", runtime.NumGoroutine())
 
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Printf("job:%s canceled by main, reason:%s\n", job, ctx.Err())
+			fmt.Printf("worker:%v canceled by main, reason:%s\n", index, ctx.Err())
 			return
-		default:
+		case job, ok := <-jobCh:
+			if !ok {
+				fmt.Println("no job any more!")
+				return
+			}
 			err := callApi(job)
 			respCh <- JobRes{job: job, err: err}
-
-			// reuse worker
-			workerCh <- struct{}{}
-			return
 		}
 	}
 }
@@ -83,8 +84,8 @@ func dealJob(ctx context.Context, workerCh chan struct{}, respCh chan JobRes, jo
 func callApi(a string) error {
 	// handler
 	time.Sleep(100 * time.Millisecond)
-	if a == "e" {
-		return errors.New("ops!")
-	}
+	//if a == "e" {
+	//	return errors.New("ops!")
+	//}
 	return nil
 }

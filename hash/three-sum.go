@@ -1,11 +1,11 @@
-package hashmap
+package hash
 
 import "sort"
 
 // a+b+c=0
 // nums = [-1, 0, 1, 2, -1, -4]，
 // [ [-1, 0, 1], [-1, -1, 2] ]
-func threeSum(nums []int) [][]int {
+func ThreeSum(nums []int) [][]int {
 	sort.Slice(nums, func(i, j int) bool {
 		return nums[i] < nums[j]
 	})

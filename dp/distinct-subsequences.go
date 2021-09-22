@@ -1,5 +1,6 @@
 package dp
 
+// NumDistinct
 // 给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
 //
 // 字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。
@@ -17,6 +18,7 @@ package dp
 //
 // if s[i - 1] != t[j - 1]
 // 		不用s[i - 1]来匹配：dp[i - 1][j]
+//
 func NumDistinct(s string, t string) int {
 	m, n := len(s), len(t)
 

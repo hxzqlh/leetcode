@@ -13,16 +13,16 @@ package list
 // 1->1->2->3->4->4->5->6
 
 // 顺序合并
-func mergeKLists(lists []*ListNode) *ListNode {
+func MergeKLists(lists []*ListNode) *ListNode {
 	ret := new(ListNode)
 	for _, v := range lists {
-		ret = mergeList(ret, v)
+		ret = MergeList(ret, v)
 	}
-	return ret
+	return ret.Next
 }
 
 // 归并合并
-func mergeKLists2(lists []*ListNode) *ListNode {
+func MergeKLists2(lists []*ListNode) *ListNode {
 	return mergeHelp(lists, 0, len(lists)-1)
 }
 
@@ -34,10 +34,11 @@ func mergeHelp(lists []*ListNode, begin int, end int) *ListNode {
 		return new(ListNode)
 	}
 	mid := (begin + end) >> 1
-	return mergeList(mergeHelp(lists, begin, mid), mergeHelp(lists, mid+1, end))
+	return MergeList(mergeHelp(lists, begin, mid), mergeHelp(lists, mid+1, end))
 }
 
-func mergeList(a *ListNode, b *ListNode) *ListNode {
+// 合并两个有序链表
+func MergeList(a *ListNode, b *ListNode) *ListNode {
 	ret := new(ListNode)
 
 	cur := ret

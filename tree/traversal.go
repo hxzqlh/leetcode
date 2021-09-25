@@ -85,3 +85,41 @@ func InOrderTraversal3(root *TreeNode) (res []int) {
 	}
 	return
 }
+
+// PreOrderTraversal
+// 前序遍历：递归
+// 空间复杂度：O(n)
+func PreOrderTraversal(root *TreeNode) (res []int) {
+	var traversal func(node *TreeNode)
+
+	traversal = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		res = append(res, node.Val)
+		traversal(node.Left)
+		traversal(node.Right)
+	}
+
+	traversal(root)
+	return
+}
+
+// PostOrderTraversal
+// 后序遍历：递归
+// 空间复杂度：O(n)
+func PostOrderTraversal(root *TreeNode) (res []int) {
+	var traversal func(node *TreeNode)
+
+	traversal = func(node *TreeNode) {
+		if node == nil {
+			return
+		}
+		traversal(node.Left)
+		traversal(node.Right)
+		res = append(res, node.Val)
+	}
+
+	traversal(root)
+	return
+}

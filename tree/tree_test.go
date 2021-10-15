@@ -63,8 +63,36 @@ func TestInOrderTraversal(t *testing.T) {
 
 	for _, v := range cases {
 		tree := Arr2Tree(v.arr)
-		//assert.Equal(t, InOrderTraversal3(tree), v.in)
-		//assert.Equal(t, PreOrderTraversal(tree), v.pre)
+		// assert.Equal(t, InOrderTraversal3(tree), v.in)
+		// assert.Equal(t, PreOrderTraversal(tree), v.pre)
 		assert.Equal(t, PostOrderTraversal(tree), v.post)
+	}
+}
+
+func TestLevelTraversal(t *testing.T) {
+	cases := []struct {
+		arr []int
+		res [][]int
+	}{
+		{[]int{3, 9, 20, Null, Null, 15, 7}, [][]int{{3}, {9, 20}, {15, 7}}},
+	}
+	for _, v := range cases {
+		tree := Arr2Tree(v.arr)
+		assert.Equal(t, v.res, LevelOrder(tree))
+	}
+}
+
+func TestRightSideView(t *testing.T) {
+	cases := []struct {
+		arr []int
+		res []int
+	}{
+		{[]int{1, 2, 3, Null, 5, Null, 4}, []int{1, 3, 4}},
+		{[]int{3, 9, 20, Null, Null, 15, 7}, []int{3, 20, 7}},
+		{[]int{1}, []int{1}},
+	}
+	for _, v := range cases {
+		tree := Arr2Tree(v.arr)
+		assert.Equal(t, v.res, RightSideView(tree))
 	}
 }

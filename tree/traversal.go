@@ -123,3 +123,119 @@ func PostOrderTraversal(root *TreeNode) (res []int) {
 	traversal(root)
 	return
 }
+
+// LevelOrder 层次遍历
+// LeetCode: #102, https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+// 二叉树：[3,9,20,null,null,15,7],
+//
+//   3
+//  / \
+// 9  20
+//   /  \
+//  15   7
+//
+// 返回其层序遍历结果：
+//
+// [
+// 		[3],
+// 		[9,20],
+// 		[15,7]
+// ]
+func LevelOrder(root *TreeNode) (res [][]int) {
+	if root == nil {
+		return
+	}
+	queue := list.New()
+	queue.PushBack(root)
+
+	var (
+		node     *TreeNode
+		levelArr []int
+	)
+	for queue.Len() > 0 {
+		size := queue.Len()
+		for i := 0; i < size; i++ {
+			node = queue.Remove(queue.Front()).(*TreeNode)
+			levelArr = append(levelArr, node.Val)
+			if node.Left != nil {
+				queue.PushBack(node.Left)
+			}
+			if node.Right != nil {
+				queue.PushBack(node.Right)
+			}
+		}
+		res = append(res, levelArr)
+		levelArr = []int{} // clear level arr
+	}
+	return
+}
+
+// LevelOrderBottom 节点值自底向上的层序遍历
+// LeetCode: #107, https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
+// 二叉树：[3,9,20,null,null,15,7],
+//
+//   3
+//  / \
+// 9  20
+//   /  \
+//  15   7
+//
+// 返回其节点值自底向上的层序遍历结果：
+//
+// [
+// 		[15,7],
+// 		[9,20],
+// 		[3],
+// ]
+func LevelOrderBottom(root *TreeNode) (res [][]int) {
+	res = LevelOrder(root)
+	// reverse
+	for i := 0; i < len(res)/2; i++ {
+		res[i], res[len(res)-i-1] = res[len(res)-i-1], res[i]
+	}
+	return
+}
+
+// RightSideView 二叉树的右视图
+// LeetCode: #199, https://leetcode-cn.com/problems/binary-tree-right-side-view/
+// 给定一个二叉树的 根节点 root，想象自己站在它的右侧，
+// 按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+// 二叉树：[1,2,3,null,5,null,4],
+//
+//   1
+//  / \
+// 2   3
+//  \   \
+//   5   4
+//
+// 返回其节点值自底向上的层序遍历结果：
+//
+// [1,3,4]
+func RightSideView(root *TreeNode) (res []int) {
+	if root == nil {
+		return
+	}
+	queue := list.New()
+	queue.PushBack(root)
+
+	var (
+		node     *TreeNode
+		levelArr []int
+	)
+	for queue.Len() > 0 {
+		size := queue.Len()
+		for i := 0; i < size; i++ {
+			node = queue.Remove(queue.Front()).(*TreeNode)
+			levelArr = append(levelArr, node.Val)
+			if node.Left != nil {
+				queue.PushBack(node.Left)
+			}
+			if node.Right != nil {
+				queue.PushBack(node.Right)
+			}
+		}
+		res = append(res, levelArr[len(levelArr)-1]) // append the last one
+		levelArr = []int{}                           // clear level arr
+	}
+	return
+}
